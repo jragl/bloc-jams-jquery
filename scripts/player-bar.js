@@ -1,6 +1,6 @@
 {
   $('button#play-pause').on('click', function() {
-    helper.playPauseAndUpdate();
+    helper.playPauseAndUpdate(player.currentlyPlaying);
     $(this).attr('playState', player.playState);
   });
 
@@ -38,19 +38,19 @@ setInterval( () => {
    $('#time-control .current-time').text(player.humanReadableTime(currentTime));
    $('#time-control .total-time').text(player.humanReadableTime(duration));
    $('#time-control input').val(percent);
-  }, 1000);
-
-$('#volume-control input').on('input', function (event) {
-    player.setVolume(event.target.value);
- });
-
-changeVolume( () => {
-   if (player.playState !== 'playing') { return; }
-   const currentVolume = player.getVolume();
-   const maxVolume = 100;
-   const percent = (currentVolume / maxVolume) * 100;
-   $('#volume-control .current-volume').text( currentVolume );
-   $('#volume-control input').val(percent);
 }, 1000);
 
+$('#volume-control input').on('input', function (event) {
+   player.setVolume(event.target.value);
+   changeVolume();
+});
+
+function changeVolume () {
+  if (player.playState !== 'playing') { return; }
+     const currentVolume = player.soundObject.getDuration(); //changed player.getVolume() to soundObject.getDuration()()
+     const maxVolume = 100;
+     const percent = (currentVolume / maxVolume) * 100;
+     $('#volume-control .current-volume').text( currentVolume );
+     $('#volume-control input').val(percent);
+}
 }
